@@ -7,8 +7,6 @@ const options = {
   access_token_secret: keys.twitterAccessTokenSecret,
 };
 
-console.log(options);
-
 const client = new require('twitter')(options);
 
 // returns a promise as a callback to client.get is not provided
