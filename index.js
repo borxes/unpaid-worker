@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose');
 const async = require('async');
+const moment = require('moment');
 const CronJob = require('cron').CronJob;
 const keys = require('./config/keys');
 const twitter = require('./services/twitService');
@@ -47,6 +48,7 @@ const processTweet = async tweet => {
 };
 
 const main = async () => {
+  console.log(`${moment().format()}: Main Task running`);
   const latestId = await Tweet.latestId();
   twitter
     .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
@@ -61,7 +63,7 @@ const main = async () => {
 };
 
 if (process.env.NODE_ENV === 'production') {
-  const job = new CronJob('* * * * *', main);
+  const job = new CronJob('* 1 * * * *', main);
   job.start();
   console.log('Cron job started');
 } else {
