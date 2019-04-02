@@ -1,0 +1,10 @@
+// logic to determine our environment
+/*global process*/
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = require('./prod');
+} else {
+  module.exports = require('./dev');
+}
+
+module.exports.slug = 'alt-fa';
