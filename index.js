@@ -6,7 +6,7 @@ const twitter = require('./services/twitService');
 const telegram = require('./services/tgService');
 require('./models/Tweet');
 
-const STATUSES_PER_REQ = 10;
+const STATUSES_PER_REQ = 50;
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 const Tweet = mongoose.model('tweets');
@@ -20,6 +20,7 @@ const processTweet = async tweet => {
     console.log(`Tweet ID ${tweet.id_str} is already in the db`);
     console.log(existingTweet);
     console.log('----------------------------------');
+    return;
   } else {
     console.log(`Processing tweet ID ${tweet.id_str}`);
     const savedTweet = await new Tweet({
@@ -31,12 +32,9 @@ const processTweet = async tweet => {
     console.log(`Saved to db: ${JSON.stringify(savedTweet)}`);
     telegram
       .postMessage(
-        `${tweet.user.screen_name}: ${tweet.text}\n` +
-          `${coins.map(coin => '$' + coin).join(' ')}`
+        `${coins.map(coin => `*${coin}*`).join(' ')}\n\n` +
+          `_${tweet.user.screen_name}_: ${tweet.text}\n`
       )
-      .then(data => {
-        console.log(data);
-      })
       .catch(err => {
         console.log(err);
       });
@@ -59,4 +57,6 @@ const main = async () => {
     });
 };
 
-main();
+const job = new CronJob('*/5 * * * *', main);
+job.start();
+console.log('Cron job started');
