@@ -47,19 +47,21 @@ const processTweet = async tweet => {
   }
 };
 
-const main = async () => {
+const main = () => {
   console.log(`${moment().format()}: Main Task running`);
-  const latestId = await Tweet.latestId();
-  twitter
-    .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
-    .then(tweets => {
-      async.each(tweets, processTweet, () => {
-        mongoose.connection.close();
+  Tweet.latestId().then(res => {
+    const latestId = res;
+    twitter
+      .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
+      .then(tweets => {
+        async.each(tweets, processTweet, () => {
+          mongoose.connection.close();
+        });
+      })
+      .catch(err => {
+        console.log(err);
       });
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  });
 };
 
 if (process.env.NODE_ENV === 'production') {
