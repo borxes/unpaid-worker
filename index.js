@@ -46,11 +46,9 @@ const processTweet = async tweet => {
 
 const main = async () => {
   const latestId = await Tweet.latestId();
-  console.log(latestId);
   twitter
     .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
     .then(tweets => {
-      console.log(`Received ${tweets.length} tweets`);
       async.each(tweets, processTweet, () => {
         mongoose.connection.close();
       });
@@ -61,7 +59,7 @@ const main = async () => {
 };
 
 if (process.env.NODE_ENV === 'production') {
-  const job = new CronJob('*/5 * * * *', main);
+  const job = new CronJob('*/1 * * * *', main);
   job.start();
   console.log('Cron job started');
 } else {
