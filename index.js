@@ -49,6 +49,7 @@ const processTweet = async tweet => {
 
 const main = () => {
   console.log(`${moment().format()}: Main Task running`);
+  mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
   Tweet.latestId().then(res => {
     const latestId = res;
     twitter
