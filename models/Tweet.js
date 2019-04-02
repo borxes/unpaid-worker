@@ -19,4 +19,8 @@ tweetSchema.statics.latestId = async function() {
   return latestTweet[0].id;
 };
 
+tweetSchema.virtual('URL').get(function() {
+  return `https://www.twitter.com/statuses/${this.id}`;
+});
+
 mongoose.model('tweets', tweetSchema);
