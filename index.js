@@ -8,6 +8,8 @@ const twitter = require('./services/twitService');
 const telegram = require('./services/tgService');
 require('./models/Tweet');
 
+console.log(process.env.NODE_ENV);
+
 const STATUSES_PER_REQ = 50;
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
