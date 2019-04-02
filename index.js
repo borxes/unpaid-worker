@@ -1,3 +1,5 @@
+/* global process */
+
 const mongoose = require('mongoose');
 const async = require('async');
 const CronJob = require('cron').CronJob;
@@ -33,7 +35,8 @@ const processTweet = async tweet => {
     telegram
       .postMessage(
         `${coins.map(coin => `*${coin}*`).join(' ')}\n\n` +
-          `_${tweet.user.screen_name}_: ${tweet.text}\n`
+          `_${tweet.user.screen_name}_: ${tweet.text}\n\n` +
+          `${savedTweet.URL}`
       )
       .catch(err => {
         console.log(err);
@@ -57,6 +60,10 @@ const main = async () => {
     });
 };
 
-const job = new CronJob('*/5 * * * *', main);
-job.start();
-console.log('Cron job started');
+if (process.env.NODE_ENV === 'production') {
+  const job = new CronJob('*/5 * * * *', main);
+  job.start();
+  console.log('Cron job started');
+} else {
+  main();
+}
