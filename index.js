@@ -61,6 +61,7 @@ const main = () => {
       })
       .catch(err => {
         console.log(err);
+        mongoose.connection.close();
       });
   });
 };
@@ -69,6 +70,15 @@ if (process.env.NODE_ENV === 'production') {
   const job = new CronJob('* 1 * * * *', main);
   job.start();
   console.log('Cron job started');
+  new CronJob(
+    '10 * * * * *',
+    function() {
+      console.log('You will see this message every second');
+    },
+    null,
+    true,
+    'America/Los_Angeles'
+  );
 } else {
   main();
 }
