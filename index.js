@@ -61,7 +61,7 @@ const main = async () => {
 };
 
 if (process.env.NODE_ENV === 'production') {
-  const job = new CronJob('* 1 * * * *', main);
+  const job = new CronJob('* * * * *', main);
   job.start();
   console.log('Cron job started');
 } else {
