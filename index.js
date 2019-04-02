@@ -70,7 +70,7 @@ if (process.env.NODE_ENV === 'production') {
   const job = new CronJob('* 1 * * * *', main);
   job.start();
   console.log('Cron job started');
-  new CronJob(
+  const job2 = new CronJob(
     '10 * * * * *',
     function() {
       console.log('You will see this message every second');
@@ -79,6 +79,7 @@ if (process.env.NODE_ENV === 'production') {
     true,
     'America/Los_Angeles'
   );
+  job2.start();
 } else {
   main();
 }
