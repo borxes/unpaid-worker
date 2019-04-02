@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const async = require('async');
+const CronJob = require('cron').CronJob;
 const keys = require('./config/keys');
 const twitter = require('./services/twitService');
+const telegram = require('./services/tgService');
 require('./models/Tweet');
 
 const STATUSES_PER_REQ = 10;
@@ -27,6 +29,17 @@ const processTweet = async tweet => {
       coins: twitter.cashTags(tweet.text),
     }).save();
     console.log(`Saved to db: ${JSON.stringify(savedTweet)}`);
+    telegram
+      .postMessage(
+        `${tweet.user.screen_name}: ${tweet.text}\n` +
+          `${coins.map(coin => '$' + coin).join(' ')}`
+      )
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 };
 

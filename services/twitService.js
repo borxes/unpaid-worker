@@ -16,7 +16,7 @@ function readStatuses(slug, count, since_id) {
   return client.get('lists/statuses', {
     slug,
     count,
-    since_id,
+    since_id: since_id > 0 ? since_id : '100000',
     owner_screen_name: SCREEN_NAME,
     include_entities: false,
   });

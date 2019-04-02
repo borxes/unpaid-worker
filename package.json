@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.6.2",
+    "cron": "^1.7.0",
     "mongoose": "^5.4.20",
+    "telegraf": "^3.28.0",
     "twitter": "^1.7.1"
   },
   "devDependencies": {

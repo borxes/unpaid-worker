@@ -16,7 +16,7 @@ tweetSchema.statics.latestId = async function() {
   const latestTweet = await this.find({})
     .sort('-id')
     .limit(1);
-  return latestTweet[0].id;
+  return latestTweet[0] ? latestTweet[0].id : 0;
 };
 
 tweetSchema.virtual('URL').get(function() {
