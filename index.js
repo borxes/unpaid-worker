@@ -49,8 +49,9 @@ const main = () => {
   console.log(`${moment().format()}: Main Task running`);
   Tweet.latestId().then(latestId => {
     twitter
-      .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
+      .readStatuses(keys.slug, STATUSES_PER_REQ)
       .then(tweets => {
+        console.log(`Received ${tweets.length} new tweets`);
         async.each(tweets, processTweet, () => {
           mongoose.connection.close();
         });
