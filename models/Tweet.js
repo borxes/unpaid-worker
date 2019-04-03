@@ -10,6 +10,7 @@ const tweetSchema = new Schema({
   coins: [String], // for simplicity
   //trader: traderSchema,
   trader: String, // for simplicty
+  date: Date,
 });
 
 tweetSchema.statics.latestId = async function() {

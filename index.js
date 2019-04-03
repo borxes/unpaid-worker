@@ -13,26 +13,25 @@ console.log(process.env.NODE_ENV);
 
 const STATUSES_PER_REQ = 50;
 
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 const Tweet = mongoose.model('tweets');
 
 const processTweet = async tweet => {
   const coins = twitter.cashTags(tweet.text);
-  if (coins.length < 1) return; // do nothing with tweets that don't mention a coin
+
+  // do nothing with tweets that don't mention a coin
+  if (coins.length < 1) return;
+
+  // don't save the same tweet twice
   const existingTweet = await Tweet.findOne({ id: tweet.id_str });
   if (existingTweet) {
-    // shouldn't happen because we are fetching tweets later than the last saved tweet
-    console.log(`Tweet ID ${tweet.id_str} is already in the db`);
-    console.log(existingTweet);
-    console.log('----------------------------------');
     return;
   } else {
-    console.log(`Processing tweet ID ${tweet.id_str}`);
     const savedTweet = await new Tweet({
       text: tweet.text,
       id: tweet.id_str,
       trader: tweet.user.screen_name,
       coins: twitter.cashTags(tweet.text),
+      date: moment.utc(tweet.created_at, twitter.TWITTER_DATE_FMT).toString(),
     }).save();
     console.log(`Saved to db: ${JSON.stringify(savedTweet)}`);
     telegram
@@ -66,10 +65,22 @@ const main = () => {
   });
 };
 
+const FORMAT = 'ddd MMM D HH:mm:ss ZZ YYYY';
+
+const test = () => {
+  twitter.readStatuses(keys.slug, 1).then(tweets => {
+    const date = tweets[0].created_at;
+    console.log(
+      `created_at ${date} moment: ${moment.utc(date, FORMAT).toString()}`
+    );
+  });
+};
+
 if (process.env.NODE_ENV === 'production') {
+  // This activates the main task at second 10 of each minute
   const job = new CronJob('10 * * * * *', main);
   job.start();
   console.log('Cron job started');
 } else {
-  main();
+  test();
 }

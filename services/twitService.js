@@ -9,6 +9,8 @@ const options = {
 
 const client = new require('twitter')(options);
 
+const TWITTER_DATE_FMT = 'ddd MMM D HH:mm:ss ZZ YYYY';
+
 // returns a promise as a callback to client.get is not provided
 function readStatuses(slug, count, since_id) {
   const SCREEN_NAME = 'yurasherman';
@@ -45,4 +47,5 @@ function cashTags(text) {
 module.exports = {
   readStatuses,
   cashTags,
+  TWITTER_DATE_FMT,
 };

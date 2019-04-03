@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@coinpaprika/api-nodejs-client": "^1.0.2",
     "async": "^2.6.2",
     "cron": "^1.7.0",
     "moment": "^2.24.0",
