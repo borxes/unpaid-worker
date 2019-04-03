@@ -2,4 +2,4 @@
 
 This program tracks tweets by people from a particular list, mentioning specific cryptocurrencies. 
 
-Tweets are saved to a MongoDB database and published to a TG channel.
+Tweets are saved to a MongoDB database and published to a TG channel: [https://t.me/hotcryptotwitter](https://t.me/hotcryptotwitter)
