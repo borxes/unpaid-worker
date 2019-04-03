@@ -24,9 +24,9 @@ const buildCoinRow = (
   )
     return result;
   result += `current price: ${btcPrice} BTC\n`;
-  result += `current price: ${btcPrice} BTC\n`;
+  result += `current price: $${usdPrice} USD\n`;
   if (percentChange1h) result += `1h change: %${percentChange1h}\n`;
-  if (percentChange24h) result += `1h change: %${percentChange24h}\n`;
+  if (percentChange24h) result += `24h change: %${percentChange24h}\n`;
   if (percentChange7d) result += `7d change: %${percentChange7d}\n`;
   return result;
 };
