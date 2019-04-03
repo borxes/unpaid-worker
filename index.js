@@ -50,7 +50,7 @@ const main = () => {
   mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
   Tweet.latestId().then(latestId => {
     twitter
-      .readStatuses(keys.slug, STATUSES_PER_REQ)
+      .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
       .then(tweets => {
         console.log(`Received ${tweets.length} new tweets`);
         async.each(tweets, processTweet, () => {
