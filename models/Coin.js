@@ -9,8 +9,14 @@ const coinSchema = new Schema({
   type: String,
 });
 
-coinSchema.virtual('tag').get(function() {
+coinSchema.virtual('cashtag').get(function() {
   return '$' + this.symbol;
 });
+
+// coin id is needed to get coin info from the Paprika API
+coinSchema.statics.getCoinIdBySymbol = async function(symbol) {
+  const coin = await this.findOne({ symbol });
+  return coin.id;
+};
 
 mongoose.model('coins', coinSchema);

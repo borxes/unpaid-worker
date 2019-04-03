@@ -9,8 +9,6 @@ const twitter = require('./services/twitService');
 const telegram = require('./services/tgService');
 require('./models/Tweet');
 
-console.log(process.env.NODE_ENV);
-
 const STATUSES_PER_REQ = 50;
 
 const Tweet = mongoose.model('tweets');
@@ -65,15 +63,13 @@ const main = () => {
   });
 };
 
-const FORMAT = 'ddd MMM D HH:mm:ss ZZ YYYY';
-
-const test = () => {
-  twitter.readStatuses(keys.slug, 1).then(tweets => {
-    const date = tweets[0].created_at;
-    console.log(
-      `created_at ${date} moment: ${moment.utc(date, FORMAT).toString()}`
-    );
-  });
+const test = async () => {
+  mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+  require('./models/Coin');
+  const Coin = mongoose.model('coins');
+  const id = await Coin.getCoinIdBySymbol('BTC');
+  console.log(id);
+  mongoose.connection.close();
 };
 
 if (process.env.NODE_ENV === 'production') {
