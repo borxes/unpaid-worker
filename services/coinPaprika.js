@@ -9,7 +9,6 @@ const getPriceById = async coinId => {
       btcPrice: 'not found',
       usdPrice: 'not found',
     };
-  // remove leading $
   coinId = coinId[0] === '$' ? coinId.substring(1) : coinId;
   const ticker = await client.getTicker({
     coinId,
@@ -18,6 +17,9 @@ const getPriceById = async coinId => {
   return {
     btcPrice: ticker.price_btc || 'not found',
     usdPrice: ticker.price_usd || 'not found',
+    percentChange1h: ticker.percent_change_1h,
+    percentChange24h: ticker.percent_change_24h,
+    percentChange7d: ticker.percent_change_7d,
   };
 };
 
