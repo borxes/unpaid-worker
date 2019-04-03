@@ -7,7 +7,9 @@ const CronJob = require('cron').CronJob;
 const keys = require('./config/keys');
 const twitter = require('./services/twitService');
 const telegram = require('./services/tgService');
+const tgMessage = require('./tgMessage');
 require('./models/Tweet');
+require('./models/Coin');
 
 const STATUSES_PER_REQ = 50;
 
@@ -32,23 +34,20 @@ const processTweet = async tweet => {
       date: moment.utc(tweet.created_at, twitter.TWITTER_DATE_FMT).toString(),
     }).save();
     console.log(`Saved to db: ${JSON.stringify(savedTweet)}`);
-    telegram
-      .postMessage(
-        `${coins.map(coin => `*${coin}*`).join(' ')}\n\n` +
-          `_${tweet.user.screen_name}_: ${tweet.text}\n\n` +
-          `${savedTweet.URL}`
-      )
-      .catch(err => {
-        console.log(err);
-      });
+    const message = await tgMessage.buildTelegramPost(
+      savedTweet.text,
+      savedTweet.trader,
+      savedTweet.URL
+    );
+    telegram.postMessage(message).catch(err => {
+      console.log(err);
+    });
   }
 };
 
 const main = () => {
   console.log(`${moment().format()}: Main Task running`);
-  mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
-  Tweet.latestId().then(res => {
-    const latestId = res;
+  Tweet.latestId().then(latestId => {
     twitter
       .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
       .then(tweets => {
@@ -63,20 +62,12 @@ const main = () => {
   });
 };
 
-const test = async () => {
-  mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
-  require('./models/Coin');
-  const Coin = mongoose.model('coins');
-  const id = await Coin.getCoinIdBySymbol('BTC');
-  console.log(id);
-  mongoose.connection.close();
-};
-
 if (process.env.NODE_ENV === 'production') {
   // This activates the main task at second 10 of each minute
   const job = new CronJob('10 * * * * *', main);
   job.start();
   console.log('Cron job started');
 } else {
-  test();
+  main();
+  console.log('In development run "npm test"');
 }

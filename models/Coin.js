@@ -15,8 +15,11 @@ coinSchema.virtual('cashtag').get(function() {
 
 // coin id is needed to get coin info from the Paprika API
 coinSchema.statics.getCoinIdBySymbol = async function(symbol) {
-  const coin = await this.findOne({ symbol });
-  return coin.id;
+  if (symbol[0] === '$') {
+    symbol = symbol.substring(1);
+  }
+  const coin = await this.findOne({ symbol: symbol.toUpperCase() });
+  return coin ? coin.id : undefined;
 };
 
 mongoose.model('coins', coinSchema);

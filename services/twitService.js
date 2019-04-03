@@ -7,7 +7,8 @@ const options = {
   access_token_secret: keys.twitterAccessTokenSecret,
 };
 
-const client = new require('twitter')(options);
+const Twitter = require('twitter');
+const client = new Twitter(options);
 
 const TWITTER_DATE_FMT = 'ddd MMM D HH:mm:ss ZZ YYYY';
 
