@@ -37,3 +37,12 @@ test('numeric conversion', async () => {
   );
   console.log(tgPost), expect(tgPost).toMatch(/TRTL/);
 });
+
+test('IOTA', async () => {
+  const tgPost = await tgMessage.buildTelegramPost(
+    '$IOTA Ternary lol',
+    'Minsk',
+    'http://url'
+  );
+  console.log(tgPost), expect(tgPost).toMatch(/IOTA/);
+});

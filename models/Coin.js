@@ -18,6 +18,7 @@ coinSchema.statics.getCoinIdBySymbol = async function(symbol) {
   if (symbol[0] === '$') {
     symbol = symbol.substring(1);
   }
+  if (symbol === 'IOTA') symbol = 'MIOTA'; // special case
   const coin = await this.findOne({ symbol: symbol.toUpperCase() });
   return coin ? coin.id : undefined;
 };

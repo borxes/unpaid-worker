@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
 const paprika = require('../services/coinPaprika');
-const twitter = require('../services/twitService');
 const tgMessage = require('../tgMessage');
 require('../models/Coin');
 
