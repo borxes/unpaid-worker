@@ -20,7 +20,6 @@ const processTweet = async tweet => {
 
   // do nothing with tweets that don't mention a coin
   if (coins.length < 1) return;
-
   // don't save the same tweet twice
   const existingTweet = await Tweet.findOne({ id: tweet.id_str });
   if (existingTweet) {
@@ -53,6 +52,7 @@ const main = () => {
       .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
       .then(tweets => {
         console.log(`Received ${tweets.length} new tweets`);
+        console.log(tweets.map(tweet => tweet.text));
         async.each(tweets, processTweet, () => {
           mongoose.connection.close();
         });

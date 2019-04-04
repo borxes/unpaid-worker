@@ -29,17 +29,8 @@ function readStatuses(slug, count, since_id) {
 // we can also use tweet.entities.symbols
 // **************************************
 function cashTags(text) {
-  const BLACK_LIST = [
-    '$BTC',
-    '$btc',
-    '$Crypto',
-    '$CRYPTO',
-    '$crypto',
-    '$alts',
-    '$ALTS',
-  ];
-  let tags = text.match(/(^|\s+)\$[a-zA-Z]{2,7}/gm);
-  // remove $crypto and $btc tags
+  const BLACK_LIST = ['$BTC', '$CRYPTO', '$ALTS', '$USDT', '$BTCUSD'];
+  let tags = text.toUpperCase().match(/(^|\s+)\$[A-Z]{2,7}/gm);
   // remove duplicate cashtags and trim whitespace
   tags = tags ? [...new Set(tags.map(tag => tag.trim()))] : [];
   return tags.filter(tag => !BLACK_LIST.includes(tag));
