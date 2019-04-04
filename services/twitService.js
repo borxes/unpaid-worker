@@ -31,15 +31,15 @@ function readStatuses(slug, count, since_id) {
 function cashTags(text) {
   const BLACK_LIST = [
     '$BTC',
-    '$btc',
-    '$Crypto',
     '$CRYPTO',
-    '$crypto',
     '$alts',
     '$ALTS',
+    '$BTCUSD',
+    '$TUSD',
+    'USDT',
   ];
   let tags = text.match(/(^|\s+)\$[a-zA-Z]{2,7}/gm);
-  // remove $crypto and $btc tags
+  tags = tags.map(tag => tag.toUpperCase());
   // remove duplicate cashtags and trim whitespace
   tags = tags ? [...new Set(tags.map(tag => tag.trim()))] : [];
   return tags.filter(tag => !BLACK_LIST.includes(tag));
