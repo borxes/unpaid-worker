@@ -15,9 +15,15 @@ const buildCoinRow = (coin, { BTC, USD }) => {
   let result = `*${coin}* \n`;
   if (!BTC || !USD) return result;
 
-  result += `Current price BTC: ${BTC.price} \n Current price USD: $${
-    USD.price
-  }\n`;
+  // get rid of the exponential notation for low sat coins
+  const btcPrice = Number(BTC.price < 1e-6)
+    ? Number(btcPrice).toFixed(8)
+    : BTC.price;
+  const usdPrice = Number(USD.price < 1e-6)
+    ? Number(usdPrice).toFixed(8)
+    : USD.price;
+
+  result += `Current price BTC: ${btcPrice} \n Current price USD: $${usdPrice}\n`;
   result += `1h change: ${BTC.percent_change_1h}% BTC ${
     USD.percent_change_1h
   }% USD\n`;

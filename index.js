@@ -15,16 +15,14 @@ const STATUSES_PER_REQ = 50;
 
 const Tweet = mongoose.model('tweets');
 
-const processTweet = async tweet => {
+const processTweet = async (tweet, callback) => {
   const coins = twitter.cashTags(tweet.text);
 
   // do nothing with tweets that don't mention a coin
   if (coins.length < 1) return;
   // don't save the same tweet twice
   const existingTweet = await Tweet.findOne({ id: tweet.id_str });
-  if (existingTweet) {
-    return;
-  } else {
+  if (!existingTweet) {
     const savedTweet = await new Tweet({
       text: tweet.text,
       id: tweet.id_str,
@@ -42,6 +40,7 @@ const processTweet = async tweet => {
       console.log(err);
     });
   }
+  callback(null);
 };
 
 const main = () => {
@@ -51,8 +50,6 @@ const main = () => {
     twitter
       .readStatuses(keys.slug, STATUSES_PER_REQ, latestId)
       .then(tweets => {
-        console.log(`Received ${tweets.length} new tweets`);
-        console.log(tweets.map(tweet => tweet.text));
         async.each(tweets, processTweet, () => {
           mongoose.connection.close();
         });
