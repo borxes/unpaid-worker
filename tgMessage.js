@@ -7,27 +7,23 @@ const Coin = mongoose.model('coins');
 
 const getPriceBySymbol = async symbol => {
   const coinId = await Coin.getCoinIdBySymbol(symbol);
-  const price = await paprika.getPriceById(coinId);
+  const price = await paprika.getQuotesById(coinId);
   return price;
 };
 
-const buildCoinRow = (
-  coin,
-  { btcPrice, usdPrice, percentChange1h, percentChange24h, percentChange7d }
-) => {
+const buildCoinRow = (coin, { BTC, USD }) => {
   let result = `*${coin}* \n`;
-  if (
-    !btcPrice ||
-    btcPrice === 'not found' ||
-    !usdPrice ||
-    usdPrice === 'not found'
-  )
-    return result;
-  result += `current price: ${btcPrice} BTC\n`;
-  result += `current price: $${usdPrice} USD\n`;
-  if (percentChange1h) result += `1h change: %${percentChange1h}\n`;
-  if (percentChange24h) result += `24h change: %${percentChange24h}\n`;
-  if (percentChange7d) result += `7d change: %${percentChange7d}\n`;
+  if (!BTC || !USD) return result;
+  result += `current price: BTC ${BTC.price} $${USD.price} USD\n`;
+  result += `1h change: ${BTC.percent_change_1h}% BTC %${
+    USD.percent_change_1h
+  } USD\n`;
+  result += `24h change: ${BTC.percent_change_24h}% BTC %${
+    USD.percent_change_24h
+  } USD\n`;
+  result += `7d change: ${BTC.percent_change_7d}% BTC %${
+    USD.percent_change_7d
+  } USD\n`;
   return result;
 };
 
