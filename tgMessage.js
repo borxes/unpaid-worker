@@ -14,20 +14,20 @@ const getPriceBySymbol = async symbol => {
 const buildCoinRow = (coin, { BTC, USD }) => {
   let result = `*${coin}* \n`;
   if (!BTC || !USD) return result;
-  result += `Current price BTC: ${BTC.price}\n`;
-  result += `Current price USD: $${USD.price} \n`;
-  if (BTC.percent_change_1h && USD.percent_change_1h)
-    result += `1h change: ${BTC.percent_change_1h}% BTC ${
-      USD.percent_change_1h
-    }% USD\n`;
-  if (BTC.percent_change_24h && USD.percent_change_24h)
-    result += `24h change: ${BTC.percent_change_24h}% BTC ${
-      USD.percent_change_24h
-    }% USD\n`;
-  if (BTC.percent_change_7d && USD.percent_change_7d)
-    result += `7d change: ${BTC.percent_change_7d}% BTC ${
-      USD.percent_change_7d
-    }% USD\n`;
+
+  result += `Current price BTC: ${BTC.price} \n Current price USD: $${
+    USD.price
+  }\n`;
+  result += `1h change: ${BTC.percent_change_1h}% BTC ${
+    USD.percent_change_1h
+  }% USD\n`;
+  result += `24h change: ${BTC.percent_change_24h}% BTC ${
+    USD.percent_change_24h
+  }% USD\n`;
+  result += `7d change: ${BTC.percent_change_7d}% BTC ${
+    USD.percent_change_7d
+  }% USD\n`;
+
   return result;
 };
 

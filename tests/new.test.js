@@ -3,7 +3,8 @@
 const paprika = require('../services/coinPaprika');
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
-const twit = require('../services/twitService');
+const twitService = require('../services/twitService');
+
 
 beforeAll(() => {
   mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
@@ -20,13 +21,12 @@ test('getQuotesById', async () => {
 });
 
 test('cashtags', async () => {
-  const cashtags = twit.cashTags(
-    '$BTC $doge $BTCUSD $crypto hello $DOGE $Alts $USDT $eth'
-  );
-  console.log(cashtags);
-  expect(cashtags).toContain('$DOGE');
-  expect(cashtags).not.toContain('$doge');
-  expect(cashtags).toContain('$ETH');
-  expect(cashtags).not.toContain('$BTCUSD');
-  expect(cashtags).not.toContain('$crypto');
+
+  const text = '$CRYPTO $btc $BTC $doge $DOGE $ETH $icx $eos';
+  const tags = twitService.cashTags(text);
+  expect(tags).toContain('$DOGE');
+  expect(tags).not.toContain('$doge');
+  expect(tags).not.toContain('$CRYPTO');
+  expect(tags).toContain('$ICX');
+
 });
