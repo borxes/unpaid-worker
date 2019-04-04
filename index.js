@@ -71,4 +71,5 @@ if (process.env.NODE_ENV === 'production') {
   console.log('Cron job started');
 } else {
   console.log('In development run "npm test"');
+  main();
 }
