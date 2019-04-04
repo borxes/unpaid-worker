@@ -4,6 +4,7 @@ const paprika = require('../services/coinPaprika');
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
 const twitService = require('../services/twitService');
+const tgMessage = require('../tgMessage');
 
 beforeAll(() => {
   mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
@@ -29,9 +30,10 @@ test('cashtags', async () => {
 });
 
 test('numeric conversion', async () => {
-  const price = await paprika.getQuotesById('trtl-turtlecoin');
-  let btcPrice = price.BTC.price;
-  if (Number(btcPrice) < 1e-6) btcPrice = Number(btcPrice).toFixed(8);
-  console.log(btcPrice);
-  expect(Number(btcPrice)).toBeLessThan(0.0001);
+  const tgPost = await tgMessage.buildTelegramPost(
+    '$TRTL Sometimes the turtle is faster than the hare',
+    'korean',
+    'http://url'
+  );
+  console.log(tgPost), expect(tgPost).toMatch(/TRTL/);
 });

@@ -17,10 +17,10 @@ const buildCoinRow = (coin, { BTC, USD }) => {
 
   // get rid of the exponential notation for low sat coins
   const btcPrice = Number(BTC.price < 1e-6)
-    ? Number(btcPrice).toFixed(8)
+    ? Number(BTC.price).toFixed(8)
     : BTC.price;
   const usdPrice = Number(USD.price < 1e-6)
-    ? Number(usdPrice).toFixed(8)
+    ? Number(USD.price).toFixed(8)
     : USD.price;
 
   result += `Current price BTC: ${btcPrice} \n Current price USD: $${usdPrice}\n`;
