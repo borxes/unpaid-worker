@@ -14,6 +14,7 @@ const getPriceBySymbol = async symbol => {
 const buildCoinRow = (coin, { BTC, USD }) => {
   let result = `*${coin}* \n`;
   if (!BTC || !USD) return result;
+
   result += `Current price BTC: ${BTC.price} \n Current price USD: $${
     USD.price
   }\n`;
@@ -26,6 +27,7 @@ const buildCoinRow = (coin, { BTC, USD }) => {
   result += `7d change: ${BTC.percent_change_7d}% BTC ${
     USD.percent_change_7d
   }% USD\n`;
+
   return result;
 };
 
