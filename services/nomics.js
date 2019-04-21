@@ -42,8 +42,8 @@ const getTickerPrice = async ticker => {
     };
   } catch (e) {
     return {
-      usdPrice: NaN,
-      btcPrice: NaN,
+      usdPrice: 0,
+      btcPrice: 0,
     };
   }
 };
