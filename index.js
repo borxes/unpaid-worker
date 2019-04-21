@@ -10,10 +10,27 @@ const telegram = require('./services/tgService');
 const tgMessage = require('./tgMessage');
 require('./models/Tweet');
 require('./models/Coin');
+require('./models/Signal');
 
 const STATUSES_PER_REQ = 50;
 
 const Tweet = mongoose.model('tweets');
+const Signal = mongoose.model('signals');
+
+const saveTweetSignals = async tweet => {
+  const coins = twitter.cashTags(tweet.text);
+
+  for (let coin of coins) {
+    const price = await tgMessage.getPriceBySymbol(coin);
+    await new Signal({
+      coin,
+      signalPrice: { btcPrice: price.BTC, usdPrice: price.USD },
+      trader: tweet.user.screen_name,
+      tweet: tweet.id_str,
+      date: moment.utc(tweet.created_at, twitter.TWITTER_DATE_FMT).toString(),
+    });
+  }
+};
 
 const processTweet = async (tweet, callback) => {
   const coins = twitter.cashTags(tweet.text);
@@ -30,7 +47,11 @@ const processTweet = async (tweet, callback) => {
       coins: twitter.cashTags(tweet.text),
       date: moment.utc(tweet.created_at, twitter.TWITTER_DATE_FMT).toString(),
     }).save();
+
+    saveTweetSignals(savedTweet);
+
     console.log(`Saved to db: ${JSON.stringify(savedTweet)}`);
+
     const message = await tgMessage.buildTelegramPost(
       savedTweet.text,
       savedTweet.trader,

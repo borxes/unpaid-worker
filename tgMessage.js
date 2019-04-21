@@ -54,4 +54,5 @@ const buildTelegramPost = async (text, trader, URL) => {
 
 module.exports = {
   buildTelegramPost,
+  getPriceBySymbol,
 };
