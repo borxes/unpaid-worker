@@ -30,4 +30,6 @@ test('getTickerPrice', async () => {
   console.log(ethPrice);
   expect(ethPrice).toHaveProperty('usdPrice');
   expect(ethPrice).toHaveProperty('btcPrice');
+  const nonPrice = await nomics.getTickerPrice('QWERTY');
+  expect(nonPrice.btcPrice).toBe(NaN);
 });

@@ -30,15 +30,22 @@ const exchangeRates = async () => {
 
 // not cached because it relies on the memoized prices() function
 const getTickerPrice = async ticker => {
-  const prices = await getPrices();
-  const exchangeRates = await getExchangeRates();
-  const usdPrice = Number(prices.find(elem => elem.currency === ticker).price);
-  const btcToUSD = exchangeRates.find(rate => rate.currency === 'BTC').rate;
-  const btcPrice = usdPrice / btcToUSD;
-  return {
-    usdPrice,
-    btcPrice,
-  };
+  try {
+    const prices = await getPrices();
+    const exchangeRates = await getExchangeRates();
+    const usdPrice = prices.find(elem => elem.currency === ticker);
+    const btcToUSD = exchangeRates.find(rate => rate.currency === 'BTC').rate;
+    const btcPrice = usdPrice / btcToUSD;
+    return {
+      usdPrice,
+      btcPrice,
+    };
+  } catch (e) {
+    return {
+      usdPrice: NaN,
+      btcPrice: NaN,
+    };
+  }
 };
 
 const getCurrencies = mem(currencies, { maxAge: CURRENCIES_MAX_AGE });
