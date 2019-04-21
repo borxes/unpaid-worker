@@ -28,7 +28,7 @@ const saveTweetSignals = async tweet => {
       trader: tweet.trader,
       tweet: tweet.id,
       date: tweet.date,
-    });
+    }).save();
   }
 };
 
