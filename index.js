@@ -7,7 +7,10 @@ const CronJob = require('cron').CronJob;
 const keys = require('./config/keys');
 const twitter = require('./services/twitService');
 const telegram = require('./services/tgService');
+const nomics = require('./services/nomics');
 const tgMessage = require('./tgMessage');
+const helpers = require('./helpers');
+
 require('./models/Tweet');
 require('./models/Coin');
 require('./models/Signal');
@@ -21,10 +24,11 @@ const saveTweetSignals = async tweet => {
   const coins = twitter.cashTags(tweet.text);
 
   for (let coin of coins) {
-    const price = await tgMessage.getPriceBySymbol(coin);
+    coin = helpers.stripCashtag(coin);
+    const price = await nomics.getTickerPrice(coin);
     await new Signal({
       coin,
-      signalPrice: { btcPrice: price.BTC.price, usdPrice: price.USD.price },
+      signalPrice: price,
       trader: tweet.trader,
       tweet: tweet.id,
       date: tweet.date,
