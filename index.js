@@ -24,7 +24,7 @@ const saveTweetSignals = async tweet => {
     const price = await tgMessage.getPriceBySymbol(coin);
     await new Signal({
       coin,
-      signalPrice: { btcPrice: price.BTC, usdPrice: price.USD },
+      signalPrice: { btcPrice: price.BTC.price, usdPrice: price.USD.price },
       trader: tweet.trader,
       tweet: tweet.id,
       date: tweet.date,
