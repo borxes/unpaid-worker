@@ -7,4 +7,5 @@ module.exports = {
   twitterAccessTokenKey: process.env.TWITTER_ACCESS_TOKEN_KEY,
   twitterAccessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
   telegramToken: process.env.TELEGRAM_TOKEN,
+  nomicsKey: process.env.NOMICS_KEY,
 };
