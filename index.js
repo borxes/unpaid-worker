@@ -22,12 +22,13 @@ const saveTweetSignals = async tweet => {
 
   for (let coin of coins) {
     const price = await tgMessage.getPriceBySymbol(coin);
+    console.log(tweet);
     await new Signal({
       coin,
       signalPrice: { btcPrice: price.BTC, usdPrice: price.USD },
-      trader: tweet.user.screen_name,
-      tweet: tweet.id_str,
-      date: moment.utc(tweet.created_at, twitter.TWITTER_DATE_FMT).toString(),
+      trader: tweet.trader,
+      tweet: tweet.id,
+      date: tweet.date,
     });
   }
 };
