@@ -28,7 +28,7 @@ const saveTweetSignals = async tweet => {
     const price = await nomics.getTickerPrice(coin);
     await new Signal({
       coin,
-      signalPrice: price,
+      signalPrice: { btcPrice: price.btcPrice, usdPrice: price.usdPrice },
       trader: tweet.trader,
       tweet: tweet.id,
       date: tweet.date,

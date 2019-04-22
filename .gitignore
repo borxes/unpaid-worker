@@ -1,4 +1,5 @@
 config/dev.js
+out/
 
 # Logs
 logs
