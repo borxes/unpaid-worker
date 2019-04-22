@@ -33,7 +33,9 @@ const getTickerPrice = async ticker => {
   try {
     const prices = await getPrices();
     const exchangeRates = await getExchangeRates();
-    const usdPrice = prices.find(elem => elem.currency === ticker);
+    const usdPrice = Number(
+      prices.find(elem => elem.currency === ticker).price
+    );
     const btcToUSD = exchangeRates.find(rate => rate.currency === 'BTC').rate;
     const btcPrice = usdPrice / btcToUSD;
     return {
